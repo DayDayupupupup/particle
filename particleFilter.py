@@ -2,6 +2,8 @@ from numpy.random import uniform, randn, random, seed
 import numpy as np
 from filterpy.monte_carlo import multinomial_resample
 import scipy.stats
+import csv
+import math
 
 seed(7)
 
@@ -48,23 +50,15 @@ def update_particles(particles, weights, obv, d_std):
     # weights.fill(1.)
     distances = np.linalg.norm(particles[:, 0:2] - obv, axis=1)
     weights *= scipy.stats.norm(0, d_std).pdf(distances)
-    weights += 1.e-300
-    weights /= sum(weights)  # 归一化
-
-
-def update(particles, weights, z, R, landmarks):
-    weights.fill(1.)
-
-    distance = np.linalg.norm(particles[:, 0:2] - landmark, axis=1)
-    weights *= scipy.stats.norm(distance, R).pdf(z[i])
-
     weights += 1.e-300       # avoid round-off to zero
-    weights /= sum(weights)  # normalize
+    weights /= sum(weights)  # 归一化
 
 
 def estimate(particles, weights):
     """估计位置"""
+    print(np.average(particles, weights=weights, axis=0))
     return np.average(particles, weights=weights, axis=0)
+
 
 
 def neff(weights):
@@ -81,10 +75,76 @@ def resample_from_index(particles, weights, indexes):
 
 def run_pf(particles, weights, z, x_range, y_range):
     """迭代一次粒子滤波，返回状态估计"""
-    x_range, y_range = [0, 20], [0, 15]
-    predict_particles(particles, 0.5, 0.01, x_range, y_range)  # 1. 预测
+    x_range, y_range = (0, 7), (0, 10)
+    predict(particles, 0.0, 0.01, 0.8)  # 1. 预测
     update_particles(particles, weights, z, 4)  # 2. 更新
     if neff(weights) < len(particles) / 2:  # 3. 重采样
         indexes = multinomial_resample(weights)
         resample_from_index(particles, weights, indexes)
     return estimate(particles, weights)  # 4. 状态估计
+
+particles = create_uniform_particles((0,1), (0,1), (0,np.pi*2), 1000)
+weights = np.array([.25]*1000)
+estimate(particles, weights)
+
+fingerData = []
+fingerMap = [[0 for i in range(81)] for i in range(57)]
+onlineData = []
+
+x=[]
+y=[]
+z=[]
+rowindex = 0
+colindex = 0
+with open('fingerPrint.csv','r') as csvfile:
+    data = csv.DictReader(csvfile)
+    for row in data:
+        list = [row['posX'], row['posY'], row['magFinger']]
+        print(list)
+        fingerMap[rowindex][colindex] = float(row['magFinger'])
+        colindex = colindex + 1
+        if colindex == 80 :
+            colindex = 0
+            rowindex = rowindex + 1
+
+        fingerData.append(list)
+print("----------map------------")
+print(fingerMap[0][80])
+print("-------------------------")
+for row in fingerData:
+    x.append(row[0])
+    y.append(row[1])
+    z.append(row[2])
+X, Y = np.meshgrid(x, y)
+
+def fun(x, y):
+    for row in fingerData:
+        if (row[0]) == x and (row[1]) == y:
+            print(row[2])
+            return row[2]
+
+#zs = np.array([fun(x,y) for x,y in zip(np.ravel(X), np.ravel(Y))])
+# Z = zs.reshape(X.shape)
+
+
+with open('online.csv','r') as csvfile:
+    data = csv.DictReader(csvfile)
+    for row in data:
+        squareMagX = math.pow(float(row['magX']), 2)
+        squareMagY = math.pow(float(row['magY']), 2)
+        squareMagZ = math.pow(float(row['magZ']), 2)
+        sqrtMag = round(math.sqrt(squareMagX + squareMagY + squareMagZ),2)
+        x= float(row['posX'])*0.8
+        y= round(float(row['posY'])*0.8,1)
+        item = [x, y, sqrtMag]
+        onlineData.append(item)
+
+print(onlineData)
+def weight(particles, obv):
+    x = particles[:, 0]
+    y = particles[:, 1]
+    x = float(("%.1f" % x))
+    y = float(("%.1f" % y))
+    distance = obv - fingerMap[int(x/0.1)][int(y/0.1)]
+
+

@@ -59,13 +59,18 @@ out.write('posX,posY,magFinger\n')
 xnew = np.linspace(0, 7, 56)  # x
 ynew = np.linspace(0, 10, 80)  # y
 fnew = newfunc(xnew, ynew)  # 仅仅是y值   100*100的值  np.shape(fnew) is 100*100
-for i in range(0,len(xnew)):
-    for j in range(0,len(ynew)):
-        fnew = newfunc(xnew[i], ynew[j])
-        item = [xnew[i]*0.8, ynew[j]*0.8, fnew[0]]
-        print("%0.1f %0.1f %0.2f" % (xnew[i]*0.8, ynew[j]*0.8, fnew[0]))
-        # csv_writer.writerow("%0.1f %0.1f %0.2f" % (xnew[i]*0.8, ynew[j]*0.8, fnew[0]))
-        out.write("%0.1f %0.1f %0.2f\n" % (xnew[i]*0.8, ynew[j]*0.8, fnew[0]))
+print('-------fnew-------')
+#print(fnew[1][3])
+print('-------------')
+# for i in range(0,len(xnew)):
+#     for j in range(0,len(ynew)):
+#         fnew = newfunc(xnew[i], ynew[j])
+#         item = [xnew[i]*0.8, ynew[j]*0.8, fnew[0]]
+#         # print("%0.1f %0.1f %0.2f" % (xnew[i]*0.8, ynew[j]*0.8, fnew[0]))
+#         # csv_writer.writerow("%0.1f %0.1f %0.2f" % (xnew[i]*0.8, ynew[j]*0.8, fnew[0]))
+#         # out.write("%0.1f %0.1f %0.2f\n" % (xnew[i]*0.8, ynew[j]*0.8, fnew[0]))
+#         out.write("%0.1f" % float(xnew[i] * 0.8) + ','+"%0.1f" % float(ynew[j] *0.8) + ','+ "%0.2f" % fnew[0]+'\n')
+#         print("%0.1f" % float(xnew[i] * 0.8) + ','+"%0.1f" % float(ynew[j] *0.8) + ','+ "%0.2f" % fnew[0]+'\n')
 #print(len(fingerPrint))
 #print(fnew[0][0])
 xnew, ynew = np.meshgrid(xnew, ynew)
@@ -74,9 +79,9 @@ surf2 = ax2.plot_surface(xnew, ynew, fnew, rstride=2, cstride=2, cmap=cm.coolwar
 ax2.set_xlabel('xnew')
 ax2.set_ylabel('ynew')
 ax2.set_zlabel('fnew(x, y)')
-plt.colorbar(surf2, shrink=0.5, aspect=5)  # 标注
+#plt.colorbar(surf2, shrink=0.5, aspect=5)  # 标注
 #
-#plt.show()
+plt.show()
 #print(fnew)
 
 
