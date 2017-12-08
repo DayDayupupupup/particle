@@ -1,3 +1,4 @@
+# coding=UTF-8
 import csv
 
 out = open('avrData.csv', 'w', newline='')

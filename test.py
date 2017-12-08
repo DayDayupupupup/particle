@@ -1,3 +1,4 @@
+# coding=UTF-8
 import csv
 fingerData=[]
 # with open('fingerPrint.csv','r') as csvfile:
