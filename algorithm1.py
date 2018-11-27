@@ -1,8 +1,10 @@
 # coding=UTF-8
 from math import *
+
+import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
-import dtw
+import DTW
 import time
 
 
@@ -74,7 +76,7 @@ def plot():
     plt.ylim(40, 100)
 
     # 画出出多路径地磁数据
-    # plt.show()
+    #plt.show()
 
 
 
@@ -97,14 +99,15 @@ def dist_for_float(p1, p2):
 def getMatching(f1,train,test,totalDistance):
     d1 = []
     d2 = []
-    dist, cost, acc, path = dtw.dtw(train, test, dist_for_float)
+    #dist, cost, acc, path = DTW.dtw(train, test, dist_for_float)
+    val, path = DTW.dtw(train, test, dist_for_float)
     index = 0
     for i in path[0]:
         index = index + 1
         if i in f1:
-            #print i, "in f1", index
-            #print path[1][index], "in f2", index
-            #print m1[i], m2[path[1][index]]
+            #print(i, "in f1", index)
+            #print(path[1][index], "in f2", index)
+            #print(m1[i], m2[path[1][index]])
             distance1 = float(i) / len(train) * totalDistance
             distance2 = float(path[1][index]) / len(test) * totalDistance
             d1.append(distance1)
@@ -112,10 +115,12 @@ def getMatching(f1,train,test,totalDistance):
     sum = 0
     for i in range(len(d1)):
         sum = sum + abs(d1[i] - d2[i])
+    print("error")
+    print(sum/len(f1))
     return sum/len(f1)
 
-#f1=[182,298,381,442,582,729]
-#f2=[176,289,363,416,526]
+f1=[182,298,381,442,582,729]
+f2=[176,289,363,416,526]
 def calculateTime(train,test,totalDistance):
     testArray = np.arange(3, int(totalDistance - 1), 2)
     timeArray = []
@@ -125,7 +130,7 @@ def calculateTime(train,test,totalDistance):
         trainCount = int(len(train)*i/totalDistance)
         testCount = int(len(test)*i/totalDistance)
         beforeTime = time.time()
-        dtw.dtw(train[trainStartCount:trainCount],test[testStartCount:testCount],dist_for_float)
+        DTW.dtw(train[trainStartCount:trainCount],test[testStartCount:testCount],dist_for_float)
         timeSpent = time.time() - beforeTime
         timeArray.append(timeSpent)
 
@@ -153,7 +158,8 @@ def run(totalDistance,train,meizu_test,samsung_test):
         meizuTimeComplexity.append(timeSpent)
         if error>3:
             error = 1.8
-        meizuX.append(index), meizuY.append(error)
+        meizuX.append(index)
+        meizuY.append(error)
         plt.scatter(index, error, color='red', marker='.')
     ##降频策略
     for i in range(len(train)):
@@ -177,6 +183,7 @@ def run(totalDistance,train,meizu_test,samsung_test):
         samsungX.append(index), samsungY.append(error)
         plt.scatter(index, error, color='blue', marker='<')
     return meizuX,meizuY,samsungX,samsungY,meizuTimeComplexity,samsungTimeComplexity
+    #return meizuX, meizuY, samsungX, samsungY
 
 
 
@@ -200,42 +207,48 @@ if __name__ == '__main__':
 
 
     #meizuX, meizuY, samsungX, samsungY =run(22.4,dormitory_train,dormitory_meizu_test,dormitory_samsung_test)
-   # meizuX,meizuY,samsungX,samsungY,meizuTimeComplexity,samsungTimeComplexity=run( 36,labatoary_train,labatoary_meizu_test,labatoary_samsung_test)
-
-    # plt.figure(1)
-    # plt.xlim(0, int(36))
-    # plt.ylim(0, 8)
-    # plt.ylabel('error(m)')
-    # plt.xlabel('distance(m)')
-    # plt.plot(meizuX, meizuY, color='red', label='MeiZu')
-    # plt.plot(samsungX, samsungY, color='blue', label='Samsung')
-    # plt.legend(loc='upper left')
-    # plt.show()
+    meizuX,meizuY,samsungX,samsungY,meizuTimeComplexity,samsungTimeComplexity=run( 36,labatoary_train,labatoary_meizu_test,labatoary_samsung_test)
+    print(meizuX)
+    print(meizuY)
+    print(samsungX)
+    print(samsungY)
+    plt.figure(1)
+    plt.xlim(0, int(36))
+    plt.ylim(0, 8)
+    plt.ylabel('error(m)')
+    plt.xlabel('distance(m)')
+    plt.plot(meizuX, meizuY, color='red', label='MeiZu')
+    plt.plot(samsungX, samsungY, color='blue', label='Samsung')
+    plt.legend(loc='upper left')
+    plt.show()
 
  # 计算算法时间
     #timeArray = calculateTime(labatoary_train,labatoary_meizu_test,36)
     #timeArray = calculateTime(dormitory_train, dormitory_meizu_test, 22.4)
-
+'''
     labatoary_dtw_time = [0.03607606887817383, 0.08699202537536621, 0.16905689239501953, 0.30249500274658203, 0.41866278648376465, 0.6913371086120605, 0.9769229888916016, 1.0394132137298584, 1.1984190940856934, 1.5450050830841064, 1.8558738231658936, 2.1356000900268555, 2.450423002243042, 2.8586511611938477, 3.266663074493408, 3.8083369731903076]
     labatoary_our_time = [0.003484010696411133, 0.004436016082763672, 0.004319190979003906, 0.0038449764251708984, 0.004487037658691406,0.004354953765869141, 0.003995180130004883, 0.004150867462158203, 0.0035219192504882812, 0.004768848419189453,0.004406929016113281, 0.004129886627197266, 0.0036580562591552734, 0.006114006042480469, 0.004014015197753906,0.005037069320678711]
 
     dormitory_dtw_time = [0.01918315887451172, 0.06260108947753906, 0.0977170467376709, 0.14432883262634277, 0.20371198654174805,0.29434800148010254, 0.38033390045166016, 0.5068089962005615, 0.6543979644775391]
     dormitory_out_time = [0.0021920204162597656, 0.0021021366119384766, 0.0018758773803710938, 0.0020339488983154297, 0.002201080322265625,0.002359151840209961, 0.002402782440185547, 0.002377033233642578, 0.002112865447998047]
     plt.figure(2)
-    print len(labatoary_dtw_time),len(labatoary_our_time)
-
-    plt.xlabel("distance(m)")
-    plt.ylabel("time(s)")
-    X = np.arange(3, 21, 2)
-    #X = np.arange(3, 35, 2)
-    #plt.plot(X,labatoary_dtw_time,label='DTW')
-    #plt.plot(X, labatoary_our_time, label='Our Algorithm',color='blue')
-    plt.plot(X, dormitory_dtw_time, label='DTW',color='red')
-    plt.plot(X, dormitory_out_time,color='blue', label='Our Algorithm')
+    print(len(labatoary_dtw_time),len(labatoary_our_time))
+    zhfont1 = matplotlib.font_manager.FontProperties(fname='C:\Windows\Fonts\simsun.ttc')
+    plt.xlabel("路径距离(单位：m)",fontproperties=zhfont1)
+    plt.ylabel("定位时间(单位：s)",fontproperties=zhfont1)
+    #X = np.arange(3, 21, 2)
+    X = np.arange(3, 35, 2)
+    plt.plot(X,labatoary_dtw_time,label='动态时间规整算法(DTW)',color='red',marker='>')
+    plt.plot(X, labatoary_our_time, label='本专利算法',color='blue',marker='.')
+    #plt.plot(X, dormitory_dtw_time, label='动态时间规整算法(DTW)',color='red',marker='>')
+    #plt.plot(X, dormitory_out_time,color='blue', label='本专利算法',marker='.')
     for i in range(len(X)):
-        plt.scatter(X[i], dormitory_dtw_time[i],marker='>')
-        plt.scatter(X[i], dormitory_out_time[i],marker='.')
-        #plt.scatter(X[i], labatoary_dtw_time[i],marker='>')
-        #plt.scatter(X[i], labatoary_our_time[i],marker='.')
-    plt.legend(loc='upper left')
+        #plt.scatter(X[i], dormitory_dtw_time[i],marker='>')
+        #plt.scatter(X[i], dormitory_out_time[i],marker='.')
+        plt.scatter(X[i], labatoary_dtw_time[i],marker='>')
+        plt.scatter(X[i], labatoary_our_time[i],marker='.')
+
+    plt.legend(loc='upper left',prop=zhfont1)
+    plt.savefig('图7.png', format='png')
     plt.show()
+'''

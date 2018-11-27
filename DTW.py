@@ -4,10 +4,10 @@ import numpy
 
 
 def print_matrix(mat):
-    print '[matrix] width : %d height : %d' % (len(mat[0]), len(mat))
-    print '-----------------------------------'
+    print( '[matrix] width : %d height : %d' % (len(mat[0]), len(mat)))
+    print ('-----------------------------------')
     for i in range(len(mat)):
-        print mat[i]  # [v[:2] for v in mat[i]]
+        print (mat[i])  # [v[:2] for v in mat[i]]
 
 
 def dist_for_float(p1, p2):
@@ -80,6 +80,8 @@ def dtw(s1, s2, dist_func):
             break
 
     # print_matrix(mat)
+    #print(retval)
+    #print(sorted(path))
 
     return retval, sorted(path)
 
@@ -110,9 +112,11 @@ def display(s1, s2):
     plt.show()
 
 
-s1 = [1, 2, 3, 4, 5, 5, 5, 4]
-s2 = [3, 4, 5, 5, 5, 4]
-s2 = [1, 2, 3, 4, 5, 5]
-s2 = [2, 3, 4, 5, 5, 5]
+#s1 = [1, 2, 3, 4, 5, 5, 5, 4]
+#s2 = [3, 4, 5, 5, 5, 4]
+#s2 = [1, 2, 3, 4, 5, 5]
+#s2 = [2, 3, 4, 5, 5, 5]
 # val, path = dtw(s1, s2, dist_for_float)
+s1 = [50.07,62.57,67.29,68.25,62.72,55.59,55.00,56.95,61.73,67.17,72.01]
+s2 = [51.28,64.23,62.47,66.13,57.08,53.10,60.76,70.81,70.34]
 display(s1, s2)

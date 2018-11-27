@@ -1,6 +1,7 @@
 # coding=UTF-8
 from scipy import stats
 from matplotlib import pyplot as plt
+import matplotlib
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
 from scipy import interpolate
@@ -10,24 +11,24 @@ import copy
 import matplotlib.patches as patches
 import matplotlib.path as path
 import algorithm1
-
+zhfont1 = matplotlib.font_manager.FontProperties(fname='C:\Windows\Fonts\simsun.ttc')
 #同一位置不同高度的地磁数据变化
 def height():
     m1 = algorithm1.getMByUrl('data/1m-magnetic.csv')
     m2 = algorithm1.getMByUrl('data/0.5m-magnetic.csv')
     m3 = algorithm1.getMByUrl('data/0.3m-magnetic.csv')
-    m4 = algorithm1.getMByUrl('data/0m-magnetic.csv')
+    #m4 = algorithm1.getMByUrl('data/0m-magnetic.csv')
     plt.figure(1)
-    plt.plot(np.arange(0,100,1),m1[100:200],color='red',marker='.',label='1m')
-    plt.plot(np.arange(0,100,1),m2[100:200],color='blue',marker='>',label='0.5m')
-    plt.plot(np.arange(0,100,1),m3[100:200],color='green',marker='1',label='0.3m')
-    plt.plot(np.arange(0,100,1),m4[100:200],color='yellow',marker='*',label='0m')
-    plt.legend(loc='upper left')
-    plt.xlabel('time(s)')
-    plt.ylabel("magnetic field(ut)")
-    plt.ylim(48,64)
+    plt.plot(np.arange(0,100,1),m1[100:200],color='b',linestyle='-',label='1m')
+    plt.plot(np.arange(0,100,1),m2[100:200],color='y',linestyle='--',label='0.5m')
+    plt.plot(np.arange(0,100,1),m3[100:200],color='r',linestyle='-.',label='0.3m')
+    #plt.plot(np.arange(0,100,1),m4[100:200],color='yellow',marker='*',label='0m')
+    plt.legend(loc='upper right')
+    plt.xlabel('采样点数目',fontproperties=zhfont1)
+    plt.ylabel("地磁强度(ut)",fontproperties=zhfont1)
+    plt.ylim(50,63)
     plt.show()
-
+height()
 
 
 m1 = algorithm1.getMByUrl('data/train-dormitory-leftpath.csv')
@@ -54,11 +55,11 @@ data.append(getAverage(m3))
 data.append(getAverage(m4))
 data.append(getAverage(m5))
 data=np.array(data)
-print data.shape
+print (data.shape)
 np.random.seed(19680801)
 #X = np.random.rand(3,2)
 X = data.T
-print X
+print (X)
 
 fig, ax = plt.subplots()
 ax.imshow(X, interpolation='nearest')
@@ -91,7 +92,7 @@ for i in range(len(steps)):
     meizu_means.append(1-float(sum/(N*mean)))
     meizu_std.append(np.std(data))
 
-print meizu_means
+print (meizu_means)
 ind = np.arange(N)  # the x locations for the groups
 width = 0.35       # the width of the bars
 
@@ -114,7 +115,7 @@ for i in range(len(steps)):
     samsung_means.append(1-float(sum/(N*mean)))
     samsung_std.append(np.std(data))
 
-print samsung_std
+print(samsung_std)
 rects2 = ax.bar(ind + width, tuple(samsung_means), width, color='y')
 
 # add some text for labels, title and axes ticks
@@ -151,9 +152,9 @@ np.random.seed(19680801)
 
 # histogram our data with numpy
 data = np.random.randn(1000)
-print data
+print (data)
 n, bins = np.histogram(data, 100)
-print bins
+print (bins)
 
 
 # get the corners of the rectangles for the histogram

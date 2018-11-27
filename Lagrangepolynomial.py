@@ -8,7 +8,7 @@ def getdata():
     for i in range(len(a)):
         a[i] = np.random.uniform(-255,255)
         b[i] = np.random.uniform(-255,255)
-        print '(%f,%f)' %(a[i],b[i]),
+        print('(%f,%f)' %(a[i],b[i]),)
     print
     return a,b
 
@@ -25,7 +25,7 @@ def Larange(x,y,a):
     return ans
 
 y2 = Larange(a,b,65)
-print y2
+print(y2)
 mpl.plot(a,b,'*')
 mpl.scatter(65,y2,c='red')
 mpl.show()
