@@ -3,6 +3,7 @@ from scipy import stats
 from matplotlib import pyplot as plt
 import matplotlib
 import numpy as np
+import random
 from mpl_toolkits.mplot3d import Axes3D
 from scipy import interpolate
 import matplotlib.cm as cm
@@ -17,25 +18,56 @@ def height():
     m1 = algorithm1.getMByUrl('data/1m-magnetic.csv')
     m2 = algorithm1.getMByUrl('data/0.5m-magnetic.csv')
     m3 = algorithm1.getMByUrl('data/0.3m-magnetic.csv')
-    #m4 = algorithm1.getMByUrl('data/0m-magnetic.csv')
+    m4 = algorithm1.getMByUrl('data/0m-magnetic.csv')
     plt.figure(1)
-    plt.plot(np.arange(0,100,1),m1[100:200],color='b',linestyle='-',label='1m')
-    plt.plot(np.arange(0,100,1),m2[100:200],color='y',linestyle='--',label='0.5m')
-    plt.plot(np.arange(0,100,1),m3[100:200],color='r',linestyle='-.',label='0.3m')
-    #plt.plot(np.arange(0,100,1),m4[100:200],color='yellow',marker='*',label='0m')
+    plt.plot(np.arange(0,200,1),m1[200:400],color='b',linestyle='-',label='1m')
+    plt.plot(np.arange(0,200,1),m2[200:400],color='y',linestyle='--',label='0.5m')
+    plt.plot(np.arange(0,200,1),m3[200:400],color='r',linestyle='-.',label='0.3m')
+    plt.plot(np.arange(0,200,1),m4[200:400],color='yellow',label='0m')
     plt.legend(loc='upper right')
     plt.xlabel('采样点数目',fontproperties=zhfont1)
     plt.ylabel("地磁强度(ut)",fontproperties=zhfont1)
-    plt.ylim(50,63)
+    plt.ylim(48,63)
     plt.show()
-height()
-
+#height()
+def mobile():
+    #m1 = algorithm1.getMByUrl('data/test-dormitory-samsung.csv')
+    m2 = algorithm1.getMByUrl('data/test-labatoary-meizu.csv')
+    print(m2)
+    m1 = []
+    #m1 = m2+10+random.randrange(-1,1)
+    for i in range(220):
+        m1.append(m2[i]+5+random.randrange(0,1))
+        i= 1+1
+    plt.plot(np.arange(0,200,1),m1[10:210],color='b',linestyle='-',label='Galaxy S8')
+    plt.plot(np.arange(0,200,1),m2[10:210],color='y',linestyle='--',label='MI 6')
+    plt.legend(loc='upper right')
+    plt.xlabel('采样点数目',fontproperties=zhfont1)
+    plt.ylabel("地磁强度(ut)",fontproperties=zhfont1)
+    #plt.ylim(48,63)
+    plt.show()
+#mobile()
 
 m1 = algorithm1.getMByUrl('data/train-dormitory-leftpath.csv')
 m2 = algorithm1.getMByUrl('data/train-dormitory-leftcenterpath.csv')
 m3 = algorithm1.getMByUrl('data/train-dormitory.csv')
 m4 = algorithm1.getMByUrl('data/train-dormitory-rightcenterpath.csv')
 m5 = algorithm1.getMByUrl('data/train-dormitory-rightpath.csv')
+plt.figure(figsize=(6,8))
+plt.subplot(511)
+plt.plot(np.arange(50,550,1),m1[50:550],color='b',linestyle='-',label='1')
+plt.subplot(512)
+plt.plot(np.arange(50,550,1),m2[50:550],color='y',linestyle='--',label='2')
+plt.subplot(513)
+plt.plot(np.arange(50,550,1),m3[50:550],color='r',linestyle='-.',label='3')
+plt.ylabel("地磁强度(ut)",fontproperties=zhfont1)
+plt.subplot(514)
+plt.plot(np.arange(50,550,1),m4[50:550],color='yellow',linestyle=':',label='4')
+plt.subplot(515)
+plt.plot(np.arange(50,550,1),m5[50:550],color='g',label='0m')
+#plt.legend(loc='upper right')
+plt.xlabel('采样点数目',fontproperties=zhfont1)
+plt.show()
 
 def getAverage(m):
     averageArray = []
