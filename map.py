@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import csv
 
 List = []
-with open('sqrtData.csv','r') as csvfile:
+with open('mag_fin.csv','r') as csvfile:
     data = csv.DictReader(csvfile)
     for row in data:
         sqrtMag = float(row['sqrtMag'])
@@ -45,8 +45,8 @@ ax.set_xlabel('X Label')
 ax.set_ylabel('Y Label')
 ax.set_zlabel('Z Label')
 
-surf = ax.plot_surface(X, Y, Z, rstride=2, cstride=2, cmap=cm.coolwarm, linewidth=0.5, antialiased=True)
-plt.colorbar(surf, shrink=0.5, aspect=5)  # 标注
+#surf = ax.plot_surface(X, Y, Z, rstride=2, cstride=2, cmap=cm.coolwarm, linewidth=0.5, antialiased=True)
+#plt.colorbar(surf, shrink=0.5, aspect=5)  # 标注
 #
 # # 二维插值
 newfunc = interpolate.interp2d(X, Y, Z, kind='cubic')  # newfunc为一个函数
@@ -57,8 +57,8 @@ label = ['posX','posY','magFinger']
 # csv_writer.writerow(label)
 out.write('posX,posY,magFinger\n')
 # # 计算56*80的网格上的插值
-xnew = np.linspace(0, 7, 56)  # x
-ynew = np.linspace(0, 10, 80)  # y
+xnew = np.linspace(0, 7, 112)  # x
+ynew = np.linspace(0, 10, 160)  # y
 fnew = newfunc(xnew, ynew)  # 仅仅是y值   100*100的值  np.shape(fnew) is 100*100
 print('-------fnew-------')
 #print(fnew[1][3])
@@ -75,12 +75,15 @@ print('-------------')
 #print(len(fingerPrint))
 #print(fnew[0][0])
 xnew, ynew = np.meshgrid(xnew, ynew)
-ax2 = plt.subplot(1, 2, 2, projection='3d')
-surf2 = ax2.plot_surface(xnew, ynew, fnew, rstride=2, cstride=2, cmap=cm.coolwarm, linewidth=0.5, antialiased=True)
-ax2.set_xlabel('xnew')
-ax2.set_ylabel('ynew')
-ax2.set_zlabel('fnew(x, y)')
-#plt.colorbar(surf2, shrink=0.5, aspect=5)  # 标注
+#ax2 = plt.plot(projection='3d')
+ax2 = fig.gca(projection='3d')
+plt.figure(figsize=(16,4))
+sur2=ax2.plot_surface(xnew, ynew, fnew, rstride=2, cstride=2, cmap=cm.coolwarm, linewidth=0.5, antialiased=True)
+ax2.set_xlabel('X(m)')
+ax2.set_ylabel('Y(m)')
+ax2.set_zlabel('Magnetic values')
+#sur2.set_clim(vmin=0, vmax=15)
+fig.colorbar(sur2,ax=ax2)  # 标注
 #
 plt.show()
 #print(fnew)

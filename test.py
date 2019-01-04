@@ -25,8 +25,8 @@ X = [3, 5, 7, 9, 11, 13, 15, 17, 19]
 Y1 = [0.5, 0.3, 0.8, 1.0, 1.1, 0.9, 0.9, 0.8, 1]
 Y2 = [1, 2, 2.8, 3, 2.6, 2.7, 2, 2.5, 3.5]
 
-plt.plot(X, Y1, label='魅族MeiZu', color='red', marker='>')
-plt.plot(X, Y2, label='三星Samsung', color='blue', marker='.')
+plt.plot(X, Y1, label='LmsLoc', color='red', marker='.')
+plt.plot(X, Y2, label='SmartPDR', color='gree', marker='*')
 for i in range(len(X)):
     plt.scatter(X[i], Y1[i], marker='>')
     plt.scatter(X[i], Y2[i], marker='.')
